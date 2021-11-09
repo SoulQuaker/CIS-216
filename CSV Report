@@ -1,0 +1,130 @@
+def main():
+
+    #create a dictionary for all of the temps per year
+    year_data = {}
+
+    #make the header true
+    header = True
+
+    #Print out the header
+    print(" Year |  Min  |  Max  |  Avg")
+    print("-----   -----   -----   ----")
+    
+    #open the file
+    my_file = open("MIGRNDRA.csv")
+    
+    #read each line of the file 
+    for line in my_file.readlines():
+        #If its the heder then we skip it
+        if header:
+
+            header = False
+            continue
+        #This is to get rid of extra white space
+        line = line.strip()
+        if not line:
+            continue
+
+         
+        #This brakes up the file and puts it into a list
+        values = line.split(',')
+
+        #gets the month
+        month = int(values[0].strip())
+
+        #gets the year
+        year = int(values[2].strip())
+
+        #gets the Temps
+        temps = float(values[3].strip())
+
+        #Creates a new list for each year
+        if year not in year_data:
+
+            year_data[year] = []
+
+        #move the temps data into the new list per year
+        year_data[year].append(temps)
+
+
+
+    #For each year thats in the new list
+    for year, temps in year_data.items():
+
+        #find the max temp
+        max_temps = get_max(temps)
+
+        #Find the min temp
+        min_temps = get_min(temps)
+
+        #Find the average of the years temp
+        avg_temps = get_average(temps)
+
+        #Print out everything formated
+        print('{:5d} |{:6.1f} |{:6.1f} |{:5.1f} '.format(year, min_temps, max_temps, avg_temps))
+
+
+    #close the file
+    my_file.close()
+
+    #Explain why the data for 2020 is messed up
+    print("This data stops on June 13th 2020, which is why the data for 2020 is so out of line. ")
+
+
+
+#Get the Average Temp
+def get_average(temps):
+
+    grand_total = 0
+
+    #Get how many items are in the list
+    for total in temps:
+
+        grand_total += total
+
+    #get the average
+    average = grand_total / len(temps)
+
+    #return the average
+    return average
+
+
+#Get the Min temp
+def get_min(temps):
+
+    lowest = None
+
+    
+    for temp in temps:
+
+        #see if the new temp is higher than the old one
+        if lowest is None or temp < lowest:
+
+
+            lowest = temp
+    
+    #return the highest
+    return lowest
+
+#Get the Max temp
+def get_max(temps):
+
+    highest = None
+
+    
+    for temp in temps:
+
+        #See if the new temp is higher than the old one 
+        if highest is None or temp > highest:
+
+            highest = temp
+
+    return highest            
+
+
+
+
+
+
+
+main()
